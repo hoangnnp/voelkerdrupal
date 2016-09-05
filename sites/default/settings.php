@@ -244,15 +244,32 @@
  *   );
  * @endcode
  */
+
+$connectstr_dbhost = '';
+$connectstr_dbname = '';
+$connectstr_dbusername = '';
+$connectstr_dbpassword = '';
+
+foreach ($_SERVER as $key => $value) {
+    if (strpos($key, "MYSQLCONNSTR_localdb") !== 0) {
+        continue;
+    }
+
+    $connectstr_dbhost = preg_replace("/^.*Data Source=(.+?);.*$/", "\\1", $value);
+    $connectstr_dbname = preg_replace("/^.*Database=(.+?);.*$/", "\\1", $value);
+    $connectstr_dbusername = preg_replace("/^.*User Id=(.+?);.*$/", "\\1", $value);
+    $connectstr_dbpassword = preg_replace("/^.*Password=(.+?)$/", "\\1", $value);
+}
+
 $databases = array (
   'default' => 
   array (
     'default' => 
     array (
-      'database' => 'voelkerdrupal',
-      'username' => 'root',
-      'password' => '',
-      'host' => 'localhost',
+      'database' => $connectstr_dbname,
+      'username' => $connectstr_dbusername,
+      'password' => $connectstr_dbpassword,
+      'host' => $connectstr_dbhost,
       'port' => '',
       'driver' => 'mysql',
       'prefix' => '',
